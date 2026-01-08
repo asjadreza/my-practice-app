@@ -15,6 +15,11 @@ export default function Home() {
             User List App
           </Link>
         </div>
+        <div className="mt-2">
+          <Link href="/redux-counter-app" className="">
+            Redux counter app
+          </Link>
+        </div>
 
       </div>
     </div>

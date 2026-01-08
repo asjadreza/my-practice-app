@@ -3,6 +3,8 @@ import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ThemeProvider } from "../context/ThemeContext";
 import Navbar from "../components/Navbar";
+import ReduxProvider from "./ReduxProvider";
+import { store } from "@/store/store";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,10 +25,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <ReduxProvider>
         <ThemeProvider>
           <Navbar />
           {children}
         </ThemeProvider>
+          </ReduxProvider>
       </body>
     </html>
   );

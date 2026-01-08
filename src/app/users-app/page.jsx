@@ -8,6 +8,9 @@ export default function User() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const USERS_PER_PAGE = 5;
 
   const fetchData = async () => {
     try {
@@ -49,6 +52,12 @@ export default function User() {
     });
   }, [users, search]);
 
+  const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
+  const paginatedUsers = useMemo(() => {
+    const startIndex = Math.ceil(currentPage - 1) * USERS_PER_PAGE;
+    return filteredUser1.slice(startIndex, startIndex + USERS_PER_PAGE);
+  }, [filteredUser1, currentPage]);
+
   return (
     <div className="container">
       <h1 className="text-center mb-5">Users</h1>
@@ -56,9 +65,11 @@ export default function User() {
       <input
         type="text"
         className="form-control mb-3"
+        placeholder="Search by name..."
         value={search}
         onChange={(e) => {
           setSearch(e.target.value);
+          setCurrentPage(1)
         }}
       />
 
@@ -84,7 +95,7 @@ export default function User() {
           <div className="col-2">Address</div>
         </div>
 
-        {filteredUser1.map((user) => (
+        {paginatedUsers.map((user) => (
           <div
             className="row border-dark border-1 border-bottom p-3"
             key={user.id}
@@ -97,6 +108,27 @@ export default function User() {
             <div className="col-2">{user.address.city}</div>
           </div>
         ))}
+
+        {/* pagination controls  */}
+        <div className="d-flex align-items-center justify-content-center gap-1 mt-3">
+          <button
+            onClick={() => setCurrentPage((p) => p - 1)}
+            disabled={currentPage === 1}
+            className="btn btn-secondary cursor-pointer"
+          >
+            Prev
+          </button>
+          <span>
+            {currentPage} of {totalPages}
+          </span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+            className="btn btn-secondary cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
